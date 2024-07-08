@@ -1,0 +1,15 @@
+name: 'Brew Haven'
+type: theme
+description: 'A custom Drupal 10 theme.'
+core_version_requirement: '^9 || ^10'
+'base theme': stable9
+
+libraries:
+  - brew_haven/global-styling
+regions:
+  header: Header/Logo
+  nav_main: 'Main navigation region'
+  content: 'Main content'
+  footer_one: 'Footer One'
+  footer_two: 'Footer Two'
+  footer_three: 'Footer Three'

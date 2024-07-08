@@ -1,0 +1,180 @@
+<?php
+
+/**
+ * @file
+ * Theme file for System Theme Settings.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Entity\File;
+
+/**
+ * Implements hook_form_system_theme_settings_alter().
+ */
+function brew_haven_form_system_theme_settings_alter(&$form, FormStateInterface $form_state, $form_id = NULL) {
+  if ($form['#attributes']['class'][0] == 'system-theme-settings') {
+    // Banner Config.
+    $form['banner'] = [
+      '#type' => 'details',
+      '#title' => t('Banner Config.'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    ];
+    $form['banner']['bg_image'] = [
+      '#type' => 'managed_file',
+      '#title' => t('Banner Image'),
+      '#default_value' => theme_get_setting('bg_image','brew_haven'),
+      '#upload_location' => 'public://',
+    ];
+    $form['banner']['banner_title'] = [
+      '#type' => 'textfield',
+      '#title' => t('Banner Title'),
+      '#default_value' => theme_get_setting('banner_title'),
+      '#description'   => t("Give a Heading inside the title."),
+    ];
+    $form['banner']['banner_sub_title'] = [
+      '#type' => 'textfield',
+      '#title' => t('Banner Sub-title'),
+      '#default_value' => theme_get_setting('banner_sub_title'),
+      '#description'   => t("Give a Sub-Heading inside the title."),
+    ];
+    $form['banner']['banner_description'] = [
+      '#type' => 'textfield',
+      '#title' => t('Banner description'),
+      '#default_value' => theme_get_setting('banner_description'),
+      '#description'   => t("Give a description inside the title."),
+    ];
+    $form['banner']['banner_button_text'] = [
+      '#type' => 'textarea',
+      '#title' => t('Banner Button Text'),
+      '#default_value' => theme_get_setting('banner_button_text'),
+    ];
+    $form['banner']['banner_button_url'] = [
+      '#type' => 'url',
+      '#title' => t('Banner Button Url'),
+      '#default_value' => theme_get_setting('banner_button_url'),
+    ];
+    $form['social_icon']= [
+    '#type' => 'details',
+    '#title' => t('Social Media Link'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    ];
+    $form['social_icon']['show_social_icon'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Show Social Icons'),
+    '#default_value' => theme_get_setting('show_social_icon'),
+    '#description'   => t("Show/Hide social media links"),
+  ];
+    $form['social_icon']['twitter_url'] = [
+      '#type' => 'textfield',
+      '#title' => t('Twitter Link'),
+      '#default_value' => theme_get_setting('twitter_url'),
+    ];
+    $form['social_icon']['facebook_url'] = [
+      '#type' => 'textfield',
+      '#title' => t('Facebook Link'),
+      '#default_value' => theme_get_setting('facebook_url'),
+    ];
+    $form['social_icon']['instagram_url'] = [
+      '#type' => 'textfield',
+      '#title' => t('Instagram Link'),
+      '#default_value' => theme_get_setting('instagram_url'),
+    ];
+    $form['social_icon']['youtube_url'] = [
+      '#type' => 'textfield',
+      '#title' => t('Youtube in Link'),
+      '#default_value' => theme_get_setting('youtube_url'),
+    ];
+    $form['footer_details']['footer_copyright'] = [
+      '#type' => 'textarea',
+      '#title' => t('Footer Copyright:'),
+      '#default_value' => theme_get_setting('footer_copyright'),
+      '#description' => t("Text area for Footer Copyright."),
+    ];
+    // Contact information.
+    $form['contact_information'] = [
+      '#type' => 'details',
+      '#title' => t('Site Information'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    ];
+    $form['contact_information']['address'] = [
+      '#type' => 'textfield',
+      '#title' => t('Address'),
+      '#default_value' => theme_get_setting('address'),
+    ];
+    $form['contact_information']['contact'] = [
+      '#type' => 'textfield',
+      '#title' => t('contact'),
+      '#default_value' => theme_get_setting('contact'),
+    ];
+    $form['contact_information']['mail_id'] = [
+      '#type' => 'textfield',
+      '#title' => t('E-Mail Id'),
+      '#default_value' => theme_get_setting('mail_id'),
+    ];
+    $form['back_to_top'] = [
+      '#type' => 'select',
+      '#title' => t('Back to top position'),
+      '#options' => [1 => 'Bottom Right', 2 => 'Bottom Left'],
+      '#default_value' => theme_get_setting('back_to_top')
+    ];
+    $form['show_footer_logo'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Show footer logo'),
+      '#default_value' => theme_get_setting('show_footer_logo'),
+      '#description'   => t("Show/Hide Footer logo"),
+    ];
+  }
+}
+function brew_haven_preprocess_page(&$variables)
+{
+  $fid = theme_get_setting('logo_footer', 'brew_haven');
+if (!empty($fid)) {
+    $file = File::load($fid[0]);
+    $file->setPermanent();
+    $file->save();
+    if (!empty($file)) {
+        $url = $file->createFileUrl();
+        $variables['logo_footer'] =  $url;
+    }
+} else {
+    $theme_path = \Drupal::service('extension.list.theme')->getPath('brew_haven');
+    $variables['logo_footer'] = '/' . $theme_path . '/logo.svg';
+}
+  $back_to_top = theme_get_setting('back_to_top');
+  if ($back_to_top== 1) {
+    $variables['back_to_top'] = 'right-side';
+  } elseif ($back_to_top == 2) {
+    $variables['back_to_top'] = 'left-side';
+  }
+  $variables['banner'] = theme_get_setting('banner');
+  $variables['banner_title'] = theme_get_setting('banner_title');
+  $variables['banner_sub_title'] = theme_get_setting('banner_sub_title');
+  $variables['banner_description'] = theme_get_setting('banner_description');
+  $variables['banner_button_text'] = theme_get_setting('banner_button_text');
+  $variables['banner_button_url'] = theme_get_setting('banner_button_url');
+  $variables['address'] = theme_get_setting('address');
+  $variables['contact'] = theme_get_setting('contact');
+  $variables['mail_id'] = theme_get_setting('mail_id');
+  $variables['twitter_url'] = theme_get_setting('twitter_url');
+  $variables['facebook_url'] = theme_get_setting('facebook_url');
+  $variables['instagram_url'] = theme_get_setting('instagram_url');
+  $variables['youtube_url'] = theme_get_setting('youtube_url');
+  $variables['footer_copyright'] = theme_get_setting('footer_copyright');
+  $variables['show_social_icon'] = theme_get_setting('show_social_icon');
+  $variables['show_footer_logo'] = theme_get_setting('show_footer_logo');
+  $fid = theme_get_setting('bg_image');
+  if (!empty($fid)) {
+      $file = \Drupal::entityTypeManager()->getStorage('file')->load($fid[0]);
+      if ($file) {
+          $uri = $file->getFileUri();
+          $image_path = \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
+      }
+  } else {
+      $theme_path = \Drupal::service('extension.list.theme')->getPath('brew_haven');
+      $image_path = '/' . $theme_path . '/img/about_coffee.png';
+  }
+$variables['banner_bg_img'] = $image_path;
+}

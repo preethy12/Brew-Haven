@@ -1,0 +1,26 @@
+favicon:
+  use_default: true
+features:
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: true
+  node_user_picture: true
+logo:
+  use_default: true
+bg_image: {  }
+banner_title: 'Fuel Your Passion'
+banner_sub_title: 'Experience the Enchantment in Every Sip'
+banner_button_text: 'Book A table'
+banner_button_url: 'https://www.drupal.org/'
+twitter_url: 'https://x.com/?lang=en'
+facebook_url: 'https://www.facebook.com/'
+instagram_url: 'https://www.instagram.com/?hl=en'
+youtube_url: 'https://www.youtube.com/'
+footer_copyright: 'Copyright ©2024 All rights reserved'
+address: 'Berndorf, Germany'
+contact: '9867686768'
+mail_id: brewhaven@gmail.com
+banner_description: 'Welcome to Brew Haven, where every bean tells a story and every cup sparks delight.'
+back_to_top: '1'
+show_social_icon: 1
+show_footer_logo: 1
